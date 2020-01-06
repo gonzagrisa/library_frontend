@@ -1,4 +1,4 @@
-# library
+# Library Frontend
 
 ## Project setup
 ```
