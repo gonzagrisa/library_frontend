@@ -56,7 +56,7 @@ export default {
 				})
 				.then(res => {
 					if (res.status == 200) {
-						this.$store.state.loggedIn=true;
+						this.$store.commit('login');
 						this.$router.push({ name: "books" });
 					} else {
 						console.log("invalid username or password");
