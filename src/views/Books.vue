@@ -1,7 +1,20 @@
 <template>
 	<div class="team">
 		<!-- {{ books.data }} -->
-		<v-container class="my-5">
+
+<!-- 		<div v-for="(book,index) in books" :key="index">{{book.title}}</div>
+ -->
+		<v-container fluid>
+			<v-row>
+				<v-col cols="12">
+					<v-row :align="alignment" :justify="justify" class="grey lighten-5" style="height: 300px;">
+						<v-card v-for="(book,index) in books" :key="index" class="ma-3 pa-6" outlined tile>{{book.title}}</v-card>
+					</v-row>
+				</v-col>
+			</v-row>
+		</v-container>
+
+		<!-- <v-container class="my-5">
 			<v-layout row wrap>
 				<v-flex xs12 sm6 md4 lg3 v-for="book in books.data" :key="book.id">
 					<v-card max-width="344" class="mx-auto">
@@ -31,7 +44,7 @@
 					</v-card>
 				</v-flex>
 			</v-layout>
-		</v-container>
+		</v-container>-->
 	</div>
 </template>
 
@@ -41,7 +54,10 @@ axios.defaults.withCredentials = true;
 export default {
 	data() {
 		return {
-			books: null
+			books: null,
+			alignment: "center",
+			dense: false,
+			justify: "center"
 		};
 	},
 	methods: {
@@ -60,7 +76,7 @@ export default {
 	mounted() {
 		axios
 			.get("http://localhost:8080/books")
-			.then(response => (this.books = response.data));
+			.then(response => (this.books = response.data.data));
 	}
 };
 </script>
