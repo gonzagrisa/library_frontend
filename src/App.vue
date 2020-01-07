@@ -14,16 +14,22 @@
 			</div>
 
 			<v-spacer></v-spacer>
+			<div v-if="!isLoggedIn">
+				<v-btn to="/login" text rounded>
+					<span class="mr-2">Login</span>
+					<v-icon>mdi-account</v-icon>
+				</v-btn>
 
-			<v-btn to="/login" text rounded>
-				<span class="mr-2">Login</span>
-				<v-icon>mdi-account</v-icon>
-			</v-btn>
-
-			<v-btn to="/register" text rounded>
-				<span class="mr-2">Crea tu Cuenta</span>
-				<v-icon>mdi-account-badge-horizontal</v-icon>
-			</v-btn>
+				<v-btn to="/register" text rounded>
+					<span class="mr-2">Crea tu Cuenta</span>
+					<v-icon>mdi-account-badge-horizontal</v-icon>
+				</v-btn>
+			</div>
+			<div v-else>
+				<v-btn @click="logout()" text rounded>
+					<span class="mr-2">Logout</span>
+				</v-btn>
+			</div>
 		</v-app-bar>
 		<v-content>
 			<router-view></router-view>
@@ -41,6 +47,7 @@
 
 <script>
 import Footer from "./components/Footer";
+import axios from "axios";
 
 export default {
 	name: "App",
@@ -48,10 +55,28 @@ export default {
 	components: {
 		Footer
 	},
+	methods:{
+		async logout() {
+			await axios
+				.post("http://localhost:8080/logout")
+				.then(res => {
+					if (res.status == 200) {
+						this.$store.commit('logout');
+						this.$router.push({ name: "home" });
+					}
+				})
+				.catch(e => {
+					console.log(e.message);
+				});
+		},
+	},
 
 	data: () => ({
 		//
-	})
+	}),
+	computed:{
+		isLoggedIn(){return this.$store.state.loggedIn}
+	}
 };
 
 //https://codepen.io/AndrewThian/pen/QdeOVa
