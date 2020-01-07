@@ -2,12 +2,12 @@
 	<v-app>
 		<v-card id="rounded-card" class="mx-auto mt-12" width="400">
 			<v-card-title class="justify-center">
-				<h1 class="display-1">Register</h1>
+				<h1 class="display-1">Crea tu Cuenta</h1>
 			</v-card-title>
 			<v-card-text>
 				<v-form>
 					<v-text-field
-						label="Username"
+						label="Nombre de Usuario"
 						prepend-icon="mdi-account-circle"
 						required
 						v-model="username"
@@ -16,7 +16,7 @@
 					<v-text-field label="Email" type="email" prepend-icon="mdi-email" v-model="email" required
 								:rules="[checkEmailUsed]"/>
 					<v-text-field
-						label="Confirm Email"
+						label="Confirmar Email"
 						type="email"
 						prepend-icon="mdi-email"
 						v-model="email2"
@@ -25,7 +25,7 @@
 					/>
 					<v-text-field
 						:type="showPassword ? 'text' : 'password'"
-						label="Password"
+						label="Contraseña"
 						prepend-icon="mdi-lock"
 						:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
 						@click:append="showPassword = !showPassword"
@@ -34,27 +34,27 @@
 					/>
 					<v-text-field
 						type="password"
-						label="Confirm Password"
+						label="Confirmar Contraseña"
 						prepend-icon="mdi-lock"
 						v-model="password2"
 						required
 						:rules="[comparePasswords]"
 					/>
 					<p class="text-center mt-5">
-						By clicking Sign Up you accept the
+						Al hacer click en Registrarse aceptas los
 						<br />
-						<router-link to="/terms">Terms and Conditions of Use</router-link>
+						<router-link to="/terms">Terminos y Condiciones de Uso</router-link>
 					</p>
 				</v-form>
 			</v-card-text>
 			<v-divider></v-divider>
 			<v-card-actions class="justify-center mt-2 mb-2">
-				<v-btn color="success" rounded>Sign Up</v-btn>
+				<v-btn color="success" rounded>Registrarse</v-btn>
 			</v-card-actions>
 		</v-card>
 		<div class="mx-auto mt-10">
 			<p class="text-center">
-				Already have an account?
+				Ya tenés una Cuenta?
 				<router-link to="/login">Login</router-link>
 			</p>
 		</div>
