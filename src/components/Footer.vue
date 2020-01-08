@@ -22,7 +22,7 @@
 				<p></p>
 				<v-btn
 					target="_blank"
-					href="https://github.com/valdazo/ubp-lab4-practicos/tree/grisafi-docker/grisafi"
+					href="https://github.com/gonzagrisa/library_frontend"
 					text
 					rounded
 				>
