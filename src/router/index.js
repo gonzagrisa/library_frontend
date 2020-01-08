@@ -9,7 +9,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: { requiresNavBar: true }
   },
   {
     path: '/about',
@@ -17,27 +18,33 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: { requiresNavBar: true }
+
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
+    meta: { requiresNavBar: false }
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/Register.vue')
+    component: () => import('../views/Register.vue'),
+    meta: { requiresNavBar: false }
   },
   {
     path: '/terms',
     name: 'terms',
-    component: () => import('../views/Terms.vue')
+    component: () => import('../views/Terms.vue'),
+    meta: { requiresNavBar: true }
   },
   {
     path: '/books',
     name: 'books',
-    component: () => import('../views/Books.vue')
+    component: () => import('../views/Books.vue'),
+    meta: { requiresNavBar: true }
   }
 ]
 
