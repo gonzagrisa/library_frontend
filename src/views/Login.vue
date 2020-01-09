@@ -1,13 +1,14 @@
 <template>
 	<v-app>
-		<h1>{{this.$store.state.loggedIn}}</h1>
+		<!-- <h1>{{this.$store.state.loggedIn}}</h1> -->
 		<v-card width="400" class="mx-auto mt-12" xs6 md3>
 			<v-card-title class="justify-center">
 				<h1 class="display-1">Login</h1>
 			</v-card-title>
 			<v-card-text>
+				<div id="errorMessage" v-if="errored">Email o Contraseña Incorrectos</div>
 				<v-form>
-					<v-text-field label="Email" prepend-icon="mdi-account-circle" v-model="email"/>
+					<v-text-field label="Email" prepend-icon="mdi-account-circle" v-model="email" />
 					<v-text-field
 						:type="showPassword ? 'text' : 'password'"
 						label="Password"
@@ -25,8 +26,8 @@
 		</v-card>
 		<div class="mx-auto mt-5">
 			<p>
-				Don't have an account yet?
-				<router-link to="/register">Sign Up</router-link>
+				Todavía no tenés una Cuenta?
+				<router-link to="/register">Registrate</router-link>
 			</p>
 		</div>
 	</v-app>
@@ -34,7 +35,7 @@
 
 <script>
 import axios from "axios";
-import Vue from 'vue';
+import Vue from "vue";
 axios.defaults.withCredentials = true;
 
 export default {
@@ -45,27 +46,26 @@ export default {
 			password: "",
 			cookie: document.cookie,
 			showPassword: false,
+			errored: false
 		};
 	},
 	methods: {
-		async login() {
-			await axios
+		login() {
+			axios
 				.post("http://localhost:8080/login", {
 					email: this.email,
 					password: this.password
 				})
-				.then(res => {
-					if (res.status == 200) {
-						this.$store.commit('login');
-						this.$router.push({ name: "books" });
-					} else {
-						console.log("invalid username or password");
-					}
+				/*then works when the response is ok*/
+				.then(response => {
+					this.$store.commit("login");
+					this.$router.push({ name: "books" });
 				})
-				.catch(e => {
-					console.log(e.message);
+				.catch(error => {
+					console.log(error.response);
+					this.errored = true;
 				});
-		},
+		}
 	},
 	mounted() {
 		window.scrollTo(0, 0);
@@ -73,8 +73,16 @@ export default {
 };
 </script>
 
-<style>
-a{
-    text-decoration: none;
+<style scoped>
+a {
+	text-decoration: none;
+}
+
+#errorMessage {
+	color: red;
+	font-weight: bold;
+	text-align: center;
+	font-size: 14px;
+	margin-bottom: 0.5rem;
 }
 </style>
