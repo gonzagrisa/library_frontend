@@ -11,7 +11,7 @@
 						prepend-icon="mdi-account-circle"
 						required
 						v-model="username"
-						:rules="[checkUsername]"
+						:rules="[checkUsername].concat(usernameRules)"
 					/>
 					<v-text-field
 						label="Email"
@@ -144,7 +144,7 @@ export default {
 			emailUsed: false,
 
 			valid: false,
-			nameRules: [
+			usernameRules: [
 				v => !!v || "Ingrese un nombre de usuario",
 				v =>
 					(v && v.length < 5) ||
