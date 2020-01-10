@@ -16,18 +16,17 @@
 			<v-spacer></v-spacer>
 			<div id="searchInput">
 				<v-autocomplete
-					v-model="inputText"
-					@change="search"
+					ref="search"
+					v-model="model"
 					:items="items"
-					:loading="isLoading"
+					label="Búsca Libros y más"
 					:search-input.sync="autocomplete"
+					@input="search"
+					:loading="isLoading"
 					color="white"
-					hide-no-data
 					item-text="Description"
-					label="Búsca Libros, Autores y más"
 					prepend-icon="mdi-magnify"
-					
-					
+					return-object
 				></v-autocomplete>
 			</div>
 			<div v-if="!isLoggedIn">
@@ -74,6 +73,17 @@ export default {
 	components: {
 		Footer
 	},
+
+	data() {
+		return {
+			descriptionLimit: 60,
+			entries: [],
+			isLoading: false,
+			model: null,
+			autocomplete: null
+		};
+	},
+
 	methods: {
 		async logout() {
 			await axios
@@ -88,50 +98,34 @@ export default {
 					console.log(e.message);
 				});
 		},
-		search(){
-			console.log("changed question mark");
-			console.log(this.inputText);
-			this.inputText=""
-			this.$router.push({ name: "login" });
+		search() {
+			console.log("Asdasdasd");
+			this.$store.state.searchObject = this.model;
+			this.entries= [];
+			this.isLoading= false;
+			this.model= [];
+			this.autocomplete= null;
+			this.$refs.search.blur()
+			this.$router.push({ name: "search" });
 		}
-
-	},
-
-	data() {
-		return {
-			descriptionLimit: 60,
-			entries: [],
-			isLoading: false,
-			inputText: null,
-			autocomplete: null
-		};
 	},
 
 	watch: {
 		autocomplete(val) {
 			// Items have already been loaded
 			if (this.items.length > 0) return;
-
 			// Items have already been requested
 			if (this.isLoading) return;
-
 			this.isLoading = true;
-
 			// Lazily load input items
-			//https://api.publicapis.org/entries
-			//http://localhost:8080/books
 			fetch("http://localhost:8080/books")
 				.then(res => res.json())
 				.then(res => {
 					console.log(res);
 					const count = res.count;
 					const entries = res.data;
-
-					console.log("Count:"+count);
-					console.log("Entries:"+entries);
 					this.count = count;
 					this.entries = entries;
-					
 				})
 				.catch(err => {
 					console.log(err);
@@ -141,13 +135,11 @@ export default {
 	},
 
 	computed: {
-		
 		items() {
 			return this.entries.map(entry => {
 				const Description =
 					entry.title.length > this.descriptionLimit
-						? entry.title.slice(0, this.descriptionLimit) +
-						  "..."
+						? entry.title.slice(0, this.descriptionLimit) + "..."
 						: entry.title;
 				return Object.assign({}, entry, { Description });
 			});
