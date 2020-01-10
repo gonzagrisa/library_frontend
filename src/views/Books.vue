@@ -1,9 +1,5 @@
 <template>
 	<div class="team">
-		<!-- {{ books.data }} -->
-
-<!-- 		<div v-for="(book,index) in books" :key="index">{{book.title}}</div>
- -->
 		<v-container fluid>
 			<v-row>
 				<v-col cols="12">
@@ -61,17 +57,7 @@ export default {
 		};
 	},
 	methods: {
-		/* async getBooks() {
-			await axios
-				.get("http://localhost:8080/books")
-				.then(res => {
-					this.books = res;
-					console.log(books);
-				})
-				.catch(e => {
-					console.log(e.message);
-				});
-		} */
+		
 	},
 	mounted() {
 		axios
