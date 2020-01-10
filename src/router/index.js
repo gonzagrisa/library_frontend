@@ -45,6 +45,12 @@ const routes = [
     name: 'books',
     component: () => import('../views/Books.vue'),
     meta: { requiresNavBar: true }
+  },
+  {
+    path:'/search',
+    name:'search',
+    component: () => import('../views/Search.vue'),
+    meta: {requiresNavBar: true }
   }
 ]
 
