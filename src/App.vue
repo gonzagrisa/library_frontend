@@ -1,7 +1,7 @@
 <template>
 	<v-app>
-		<v-app-bar v-if="$route.meta.requiresNavBar" app color="primary" dark>
-			<div class="d-flex align-center">
+		<v-app-bar v-if="$route.meta.requiresNavBar" app color="primary" dark elevate-on-scroll>
+			<router-link to="/">
 				<v-img
 					alt="Vuetify Logo"
 					class="shrink mr-2"
@@ -9,9 +9,12 @@
 					src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
 					transition="scale-transition"
 					width="40"
-				/>
-				<h2>BookJar</h2>
-			</div>
+					to="/"
+				></v-img>
+			</router-link>
+			<v-toolbar-title>
+				<router-link to="/" tag="span" style="cursor: pointer">BookJar</router-link>
+			</v-toolbar-title>
 
 			<v-spacer></v-spacer>
 			<div id="searchInput">
@@ -27,8 +30,14 @@
 					item-text="Description"
 					prepend-icon="mdi-magnify"
 					return-object
+					:hide-no-data="hideData"
+					no-data-text="No se encontraron resultados"
 				></v-autocomplete>
 			</div>
+			<v-btn to="/books" text rounded>
+				<span class="mr-2">Explorar</span>
+				<v-icon>mdi-compass</v-icon>
+			</v-btn>
 			<div v-if="!isLoggedIn">
 				<v-btn to="/login" text rounded>
 					<span class="mr-2">Login</span>
@@ -41,7 +50,7 @@
 				</v-btn>
 			</div>
 			<div v-else>
-				<v-btn text rounded>
+				<v-btn to="/loans" text rounded>
 					<span class="mr-2">Préstamos</span>
 					<v-icon>mdi-book</v-icon>
 				</v-btn>
@@ -53,12 +62,6 @@
 		<v-content>
 			<router-view></router-view>
 		</v-content>
-		<p>
-			<br />
-			<br />
-			<br />
-			<br />
-		</p>
 		<Footer class="mt-12" />
 	</v-app>
 </template>
@@ -66,6 +69,7 @@
 <script>
 import Footer from "./components/Footer";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 export default {
 	name: "App",
@@ -80,7 +84,8 @@ export default {
 			entries: [],
 			isLoading: false,
 			model: null,
-			autocomplete: null
+			autocomplete: null,
+			hideData: true
 		};
 	},
 
@@ -99,13 +104,13 @@ export default {
 				});
 		},
 		search() {
-			console.log("Asdasdasd");
 			this.$store.state.searchObject = this.model;
-			this.entries= [];
-			this.isLoading= false;
-			this.model= [];
-			this.autocomplete= null;
-			this.$refs.search.blur()
+			console.log(this.$store.state.searchObject);
+			this.entries = [];
+			this.isLoading = false;
+			this.model = [];
+			this.autocomplete = null;
+			this.$refs.search.blur();
 			this.$router.push({ name: "search" });
 		}
 	},
@@ -121,11 +126,11 @@ export default {
 			fetch("http://localhost:8080/books")
 				.then(res => res.json())
 				.then(res => {
-					console.log(res);
 					const count = res.count;
 					const entries = res.data;
 					this.count = count;
 					this.entries = entries;
+					this.hideData = false;
 				})
 				.catch(err => {
 					console.log(err);
@@ -155,7 +160,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Open+Sans&display=swap");
 
 .v-application {
 	font-family: "Montserrat", sans-serif !important;
