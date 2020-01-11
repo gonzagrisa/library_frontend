@@ -58,11 +58,13 @@ export default {
 				})
 				/*then works when the response is ok*/
 				.then(response => {
-					this.$store.commit("login");
+					const userId = response.data.userId;
+					this.$store.commit('login');
+					this.$store.state.userId = userId;
 					this.$router.push({ name: "books" });
 				})
 				.catch(error => {
-					console.log(error.response);
+					console.log(error);
 					this.errored = true;
 				});
 		}
