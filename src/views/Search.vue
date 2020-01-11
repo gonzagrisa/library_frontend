@@ -1,42 +1,48 @@
 <template>
 	<v-app>
-		<v-card class="mx-auto" max-width="400">
-			<v-img
-				class="white--text align-end"
-				height="200px"
-				src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-			>
-				<v-card-title>{{}}</v-card-title>
-			</v-img>
-
-			<v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-			<v-card-text class="text--primary">
-				<div>Whitehaven Beach</div>
-
-				<div>Whitsunday Island, Whitsunday Islands</div>
-			</v-card-text>
-
-			<v-card-actions>
-				<v-btn color="orange" text>Share</v-btn>
-
-				<v-btn color="orange" text>Explore</v-btn>
-			</v-card-actions>
-		</v-card>
+		<div id="book" class="mx-auto">
+			<p class="display-2">{{this.$store.state.searchObject.title}}</p>
+			<v-divider></v-divider>
+			<p>Autor: {{this.$store.state.searchObject.author}}</p>
+			<p>Cantidad disponible: {{this.$store.state.searchObject.amount}}</p>
+			<v-btn color="success" v-if="this.$store.state.loggedIn" rounded @click="makeLoan">Pedir Prestamo</v-btn>
+		</div>
 	</v-app>
 </template>
 
 <script>
+import Axios from "axios";
 export default {
-	data(){
-		return{
-			book: this.$store.getBook()
-		}
+	data() {
+		return {
+		};
 	},
+
 	mounted() {
 		window.scrollTo(0, 0);
+	},
+	
+	methods:{
+		makeLoan(){
+			Axios
+			.post("http://localhost:8080/loans")
+			.then(response => {
+				this.books = response.data.data
+			});
+		}
 	}
 };
 </script>
 
-<style>
+<style scoped>
+.card {
+	padding-left: 6em;
+	padding-right: 6em;
+	padding-top: 2em;
+}
+
+#book{
+
+}
+
+</style>

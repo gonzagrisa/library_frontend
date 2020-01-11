@@ -5,7 +5,7 @@
 					<v-layout column align-center justify-center class="white--text">
 						<h1 class="white--text mb-2 display-4 text-center font-weight-bold">La Librería del Gonzi</h1>
 						<div class="subheading mb-4 text-center display-1">Los mejores Libros, en el Mejor Lugar</div>
-						<v-btn class="mt-12" color="blue lighten-2" dark large href="/pre-made-themes">Get Started</v-btn>
+						<v-btn class="mt-12" color="blue" dark large to="/login">Comenzá</v-btn>
 					</v-layout>
 				</v-parallax>
 			</section>

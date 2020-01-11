@@ -62,7 +62,9 @@ export default {
 	mounted() {
 		axios
 			.get("http://localhost:8080/books")
-			.then(response => (this.books = response.data.data));
+			.then(response => {
+				this.books = response.data.data
+			});
 	}
 };
 </script>
