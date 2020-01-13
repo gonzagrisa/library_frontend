@@ -47,17 +47,33 @@ const routes = [
     meta: { requiresNavBar: true }
   },
   {
-    path:'/search',
-    name:'search',
+    path: '/search',
+    name: 'search',
     component: () => import('../views/Search.vue'),
-    meta: {requiresNavBar: true }
+    meta: { requiresNavBar: true }
   },
   {
-    path:'/loans',
-    name:'loans',
+    path: '/loans',
+    name: 'loans',
     component: () => import('../views/Loans.vue'),
-    meta: {requiresNavBar: true}
-  }
+    meta: { requiresNavBar: true }
+  },
+  { 
+    path: '/500',
+    name: 'serverError',
+    component: () => import('../components/ServerError.vue'),
+    meta: { requiresNavBar: false}
+  },
+  { 
+    path: '/404',
+    name: 'notFound',
+    component: () => import('../components/NotFound.vue'),
+    meta: { requiresNavBar: false}
+  },
+  { 
+    path: '*', 
+    redirect: '/404'
+  },
 ]
 
 const router = new VueRouter({
