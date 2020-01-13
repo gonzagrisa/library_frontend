@@ -62,7 +62,7 @@
 		<v-content>
 			<router-view></router-view>
 		</v-content>
-		<Footer class="mt-12" />
+		<Footer/>
 	</v-app>
 </template>
 
