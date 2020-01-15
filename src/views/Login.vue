@@ -21,7 +21,7 @@
 			</v-card-text>
 			<v-divider></v-divider>
 			<v-card-actions class="justify-center mb-5 mt-3">
-				<v-btn color="info" rounded @click="login">Login</v-btn>
+				<v-btn :loading="this.loading" color="info" rounded @click="login">Login</v-btn>
 			</v-card-actions>
 		</v-card>
 		<div class="mx-auto mt-5">
@@ -46,11 +46,13 @@ export default {
 			password: "",
 			cookie: document.cookie,
 			showPassword: false,
-			errored: false
+			errored: false,
+			loading:false
 		};
 	},
 	methods: {
 		login() {
+			this.loading=true;
 			axios
 				.post("http://localhost:8080/login", {
 					email: this.email,
@@ -58,6 +60,7 @@ export default {
 				})
 				/*then works when the response is ok*/
 				.then(response => {
+					this.loading=false;
 					const userId = response.data.userId;
 					this.$store.commit('login');
 					this.$store.state.userId = userId;
