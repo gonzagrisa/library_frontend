@@ -1,73 +1,47 @@
 <template>
 	<v-app>
-		<!-- <div v-if="this.cover">
-			<h1>COVER NOT NULL</h1>
-			<v-img :src="this.$store.state.searchObject.cover" />
-		</div>
-		<div v-else>
-			<h1>COVER NULL</h1>
-			<v-img
-				src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
-			/>
-		</div>
-		<div id="book" class="mx-auto">
-			<p class="display-2">{{this.$store.state.searchObject.title}}</p>
-			<v-divider></v-divider>
-			<p>Autor: {{this.$store.state.searchObject.author}}</p>
-			<p>Cantidad disponible: {{this.$store.state.searchObject.amount}}</p>
-			<v-btn color="success" v-if="this.$store.state.loggedIn" rounded @click="makeLoan">Pedir Prestamo</v-btn>
-			<p>Días:</p>
-			<v-slider v-model="days" track-color="grey" always-dirty min="1" max="15">
-				<template v-slot:prepend>
-					<v-icon color="blue">mdi-minus</v-icon>
-				</template>
-
-				<template v-slot:append>
-					<v-icon color="blue">mdi-plus</v-icon>
-				</template>
-		</v-slider>-->
-
-		<!-- <v-card dark>
-				<div class="d-flex flex-no-wrap justify-space-between">
-					<div>
-						<v-card-title class="headline">{{this.$store.state.searchObject.title}}</v-card-title>
-
-						<v-card-subtitle>{{this.$store.state.searchObject.amount}}</v-card-subtitle>
-					</div>
-
-					<v-avatar class="profile" color="grey" size="164" tile>
-						<div v-if="this.cover">
-							<h1>COVER NOT NULL</h1>
-							<v-img height="200" width="200" :src="this.$store.state.searchObject.cover" />
-						</div>
-						<div v-else>
-							<h1>COVER NULL</h1>
-							<v-img
-								src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
-							/>
-						</div>
-					</v-avatar>
-				</div>
-		</v-card>-->
-		<!-- </div> -->
-		<v-card color="white" dark width="650px" class="mx-auto mt-12">
+		<v-card color="white" width="650px" class="mx-auto mt-12" raised>
 			<div class="d-flex flex-no-wrap justify-space-between">
-				<v-avatar class="ma-1" size="400" tile>
-					<v-img v-if="this.cover" :src="this.$store.state.searchObject.cover"
+				<v-avatar id="cover" class="ma-1 mt-3 mb-3" size="400" tile>
+					<v-img
+						v-if="this.cover"
+						:src="this.$store.state.searchObject.cover"
 						contain
-						style="background-size:contain;"/>
-					<v-img v-else
+						style="background-size:contain;"
+					/>
+					<v-img
+						v-else
 						contain
 						src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
 					/>
 				</v-avatar>
-				<div class="cardText">
-					<v-card-title class="headline black--text">{{this.$store.state.searchObject.title}}</v-card-title>
+				<v-divider id="divider" vertical></v-divider>
 
-					<v-card-subtitle class="black--text">{{this.$store.state.searchObject.author}}</v-card-subtitle>
-					<v-btn class="green">Pedir Préstamo</v-btn>
-					<v-card-text class="black--text">{{this.$store.state.searchObject.amount}} Disponibles</v-card-text>
-				
+				<div class="cardText">
+					<v-card-title id="title" class="black--text">{{this.$store.state.searchObject.title}}</v-card-title>
+					<v-card-subtitle id="author" class="black--text">{{this.$store.state.searchObject.author}}</v-card-subtitle>
+					<v-divider></v-divider>
+					<v-card-title id="loan" class="black--text mt-1">Préstamo</v-card-title>
+					<v-card-text id="days" class="black--text">Días: {{days}}</v-card-text>
+					<v-slider v-model="days" color="blue" track-color="grey" min="1" max="15" 
+							  :disabled="!this.$store.state.loggedIn">
+						<template v-slot:prepend>
+							<v-icon @click="decrement" :color="iconColor">mdi-minus</v-icon>
+						</template>
+						<template v-slot:append>
+							<v-icon @click="increment" :color="iconColor">mdi-plus</v-icon>
+						</template>
+					</v-slider>
+
+					<v-card-subtitle
+						id="available"
+						class="darkgrey--text"
+					>{{this.$store.state.searchObject.amount}} Disponibles</v-card-subtitle>
+
+					<v-btn color="blue darken-4" class="white--text mx-auto" 
+					@click="postLoan"
+					:disabled="!this.$store.state.loggedIn"
+					width="100%">Pedir Préstamo</v-btn>
 				</div>
 			</div>
 		</v-card>
@@ -76,11 +50,14 @@
 
 <script>
 import Axios from "axios";
+Axios.defaults.withCredentials = true;
+
 export default {
 	data() {
 		return {
-			days: 0,
-			cover: null
+			days: 1,
+			cover: null,
+			iconColor: (this.$store.state.loggedIn) ? "blue" : "grey"
 		};
 	},
 
@@ -92,14 +69,23 @@ export default {
 	},
 
 	methods: {
-		makeLoan() {
-			Axios.post("http://localhost:8080/loans")
+		postLoan() {
+			Axios.post("http://localhost:8080/loans", {
+					days:this.days,
+					bookId: this.$store.state.searchObject.id
+				})
 				.then(response => {
-					this.books = response.data.data;
+					console.log(response.data);
 				})
 				.catch(error => {
-					console.log(error);
+					console.log(error.response);
 				});
+		},
+		decrement() {
+			this.days--;
+		},
+		increment() {
+			this.days++;
 		}
 	}
 };
@@ -107,13 +93,52 @@ export default {
 
 <style scoped>
 .card {
-	padding-left: 6em;
-	padding-right: 6em;
+	padding-left: 2em;
+	padding-right: 1em;
 	padding-top: 2em;
 }
 
-.cardText{
-	padding-right: 5em;
+#cover {
+	width: 300px !important;
+	min-width: 0px !important;
 }
 
+.cardText {
+	padding-right: 2em;
+	width: 20em;
+}
+
+#title {
+	margin-top: 0.5em;
+	margin-left: -0.7rem;
+	font-weight: 800;
+	font-size: 25px;
+}
+
+#author {
+	margin-top: -10px;
+	margin-left: -0.7em;
+}
+
+#loan {
+	font-weight: 800;
+	font-size: 25px;
+	margin-left: -0.7rem;
+}
+
+#days {
+	margin-bottom: -0.7rem;
+	margin-left: -0.7em;
+	margin-top: 1em;
+	font-weight: 500;
+	font-size: 18px;
+}
+
+#available {
+	margin-top: 1em;
+}
+
+#divider {
+	margin-right: 1rem;
+}
 </style>
