@@ -24,7 +24,7 @@
 					:items="items"
 					label="Búsca Libros y más"
 					:search-input.sync="autocomplete"
-					@input="search"
+					@change="search"
 					:loading="isLoading"
 					color="white"
 					item-text="Description"
@@ -60,9 +60,9 @@
 			</div>
 		</v-app-bar>
 		<v-content>
-			<router-view></router-view>
+			<router-view :key="viewKey"></router-view>
 		</v-content>
-		<Footer/>
+		<Footer />
 	</v-app>
 </template>
 
@@ -85,7 +85,8 @@ export default {
 			isLoading: false,
 			model: null,
 			autocomplete: null,
-			hideData: true
+			hideData: true,
+			viewKey: 0
 		};
 	},
 
@@ -104,14 +105,21 @@ export default {
 				});
 		},
 		search() {
-			this.$store.state.searchObject = this.model;
-			console.log(this.$store.state.searchObject);
-			this.entries = [];
-			this.isLoading = false;
-			this.model = [];
-			this.autocomplete = null;
-			this.$refs.search.blur();
-			this.$router.push({ name: "search" });
+			if (this.model != []) {
+				console.log("MODEL:");
+				console.log(this.model);
+				console.log("\n\nSEARCH FIRED");
+				this.$store.commit("searchedObject", this.model);
+				console.log(this.model);
+				this.entries = [];
+				this.isLoading = false;
+				this.model = [];
+				this.autocomplete = null;
+				this.hideData = true;
+				this.$refs.search.blur();
+				this.viewKey += 1;
+				this.$router.push({ name: "search" });
+			}
 		}
 	},
 
