@@ -17,6 +17,7 @@
 			</v-toolbar-title>
 
 			<v-spacer></v-spacer>
+
 			<div id="searchInput">
 				<v-autocomplete
 					ref="search"
@@ -32,7 +33,23 @@
 					return-object
 					:hide-no-data="hideData"
 					no-data-text="No se encontraron resultados"
-				></v-autocomplete>
+				>
+					<template v-slot:item="data">
+						<template v-if="typeof data.item !== 'object'">
+							<v-list-item-content v-text="data.item"></v-list-item-content>
+						</template>
+						<template v-else>
+							<v-list-item-avatar>
+								<img v-if="data.item.cover" :src="data.item.cover"/>
+								<img v-else src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"/>
+							</v-list-item-avatar>
+							<v-list-item-content>
+								<v-list-item-title v-html="data.item.title"></v-list-item-title>
+								<v-list-item-subtitle v-html="data.item.author"></v-list-item-subtitle>
+							</v-list-item-content>
+						</template>
+					</template>
+				</v-autocomplete>
 			</div>
 			<v-btn to="/books" text rounded>
 				<span class="mr-2">Explorar</span>
@@ -106,11 +123,7 @@ export default {
 		},
 		search() {
 			if (this.model != []) {
-				console.log("MODEL:");
-				console.log(this.model);
-				console.log("\n\nSEARCH FIRED");
 				this.$store.commit("searchedObject", this.model);
-				console.log(this.model);
 				this.entries = [];
 				this.isLoading = false;
 				this.model = [];
@@ -138,6 +151,7 @@ export default {
 					const entries = res.data;
 					this.count = count;
 					this.entries = entries;
+					console.log(this.entries);
 					this.hideData = false;
 				})
 				.catch(err => {
