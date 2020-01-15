@@ -8,12 +8,15 @@ export default new Vuex.Store({
   state: {
     loggedIn: false,
     userId: null,
-    searchObject:null
+    searchObject: null
   },
   plugins: [createPersistedState()],
   mutations: {
     login: state => state.loggedIn = true,
-    logout: state => state.loggedIn = false
+    logout: state => state.loggedIn = false,
+    searchedObject (state, book) {
+      state.searchObject = book;
+    }
   },
 
   actions: {
