@@ -77,7 +77,7 @@
 			</div>
 		</v-app-bar>
 		<v-content>
-			<router-view :key="viewKey"></router-view>
+			<router-view :key="this.$store.state.viewKey"></router-view>
 		</v-content>
 		<Footer />
 	</v-app>
@@ -103,7 +103,7 @@ export default {
 			model: null,
 			autocomplete: null,
 			hideData: true,
-			viewKey: 0
+			/* viewKey: 0 */
 		};
 	},
 
@@ -130,7 +130,7 @@ export default {
 				this.autocomplete = null;
 				this.hideData = true;
 				this.$refs.search.blur();
-				this.viewKey += 1;
+				this.$store.state.viewKey += 1;
 				this.$router.push({ name: "search" });
 			}
 		}
