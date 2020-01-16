@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     loggedIn: false,
     userId: null,
-    searchObject: null
+    searchObject: null,
+    viewKey:0
   },
   plugins: [createPersistedState()],
   mutations: {
