@@ -2,10 +2,10 @@
 	<v-app light>
 		<section class="parallaxx">
 			<v-parallax
-				height="900"
+				height="850"
 				:src="require('../../public/parallaximage.png')"
 				>
-					<v-layout column align-center justify-center class="white--text">
+					<v-layout id="parallaxText" column align-center justify-center class="white--text">
 						<h1 class="white--text mb-4 display-4 text-center font-weight-bold">BookJar</h1>
 						<div class="subheading mb-4 text-center display-1">Los mejores Libros, en el Mejor Lugar</div>
 					</v-layout>
@@ -138,8 +138,8 @@ export default {
 </script>
 
 <style scoped>
-.parallaxx img{
-	
- }
+#parallaxText{
+	margin-top: -1em;
+}
 
 </style>
