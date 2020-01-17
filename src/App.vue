@@ -41,7 +41,7 @@
 						<template v-else>
 							<v-list-item-avatar>
 								<img v-if="data.item.cover" :src="data.item.cover"/>
-								<img v-else src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"/>
+								<img v-else src="../public/no_cover.jpg"/>
 							</v-list-item-avatar>
 							<v-list-item-content>
 								<v-list-item-title v-html="data.item.title"></v-list-item-title>

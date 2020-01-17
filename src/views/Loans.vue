@@ -24,7 +24,7 @@
 						<v-img
 							v-else
 							contain
-							src="https://islandpress.org/sites/default/files/400px%20x%20600px-r01BookNotPictured.jpg"
+							src="../../public/no_cover.jpg"
 						/>
 					</v-avatar>
 					<v-card-text>
