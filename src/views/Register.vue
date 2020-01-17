@@ -240,9 +240,9 @@ export default {
 </script>
 
 <style>
-/* #rounded-card{
+#rounded-card{
     border-radius:50px;
-} */
+}
 a {
 	text-decoration: none;
 	font-weight: bold;
