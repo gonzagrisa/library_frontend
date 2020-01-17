@@ -47,28 +47,30 @@ export default {
 			cookie: document.cookie,
 			showPassword: false,
 			errored: false,
-			loading:false
+			loading: false
 		};
 	},
 	methods: {
 		login() {
-			this.loading=true;
+			this.loading = true;
 			axios
 				.post("http://localhost:8080/login", {
 					email: this.email,
 					password: this.password
 				})
-				/*then works when the response is ok*/
 				.then(response => {
-					this.loading=false;
-					const userId = response.data.userId;
-					this.$store.commit('login');
-					this.$store.state.userId = userId;
+					this.loading = false;
+					const id = response.data.userId;
+					const rol = response.data.rol;
+					this.$store.commit("login", {
+						userId: id,
+						userRol: rol
+					});
 					this.$router.push({ name: "books" });
 				})
 				.catch(error => {
 					console.log(error);
-					this.loading=false;
+					this.loading = false;
 					this.errored = true;
 				});
 		}
