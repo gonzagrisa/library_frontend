@@ -103,7 +103,7 @@ export default {
 			model: null,
 			autocomplete: null,
 			hideData: true,
-			/* viewKey: 0 */
+			idBook:null
 		};
 	},
 
@@ -123,15 +123,16 @@ export default {
 		},
 		search() {
 			if (this.model != []) {
-				this.$store.commit("searchedObject", this.model);
+				this.$router.push({ name: 'book', params: { bookId: this.model.id } })
 				this.entries = [];
 				this.isLoading = false;
 				this.model = [];
 				this.autocomplete = null;
 				this.hideData = true;
 				this.$refs.search.blur();
-				this.$store.state.viewKey += 1;
-				this.$router.push({ name: "search" });
+				if(this.$route.name == "book"){
+					this.$store.state.viewKey += 1;
+				}
 			}
 		}
 	},
@@ -177,8 +178,6 @@ export default {
 		}
 	}
 };
-
-//https://codepen.io/AndrewThian/pen/QdeOVa
 </script>
 
 <style>
