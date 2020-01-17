@@ -47,9 +47,9 @@ const routes = [
     meta: { requiresNavBar: true }
   },
   {
-    path: '/search',
-    name: 'search',
-    component: () => import('../views/Search.vue'),
+    path: '/book/:bookId',
+    name: 'book',
+    component: () => import('../views/Book.vue'),
     meta: { requiresNavBar: true }
   },
   {
@@ -58,20 +58,41 @@ const routes = [
     component: () => import('../views/Loans.vue'),
     meta: { requiresNavBar: true }
   },
-  { 
+  {
+    path: '/books/create',
+    name: 'postBook',
+    component: () => import('../views/CreateBook.vue'),
+    meta: { requiresNavBar: true },
+    beforeEnter: (to, from, next) => {
+      if (store.state.loggedIn && store.state.rol == 'admin') {
+        console.log("ADMIN");
+        next();
+      }
+      else {
+        next('/404');
+      }
+    }
+  },
+  {
     path: '/500',
     name: 'serverError',
     component: () => import('../components/ServerError.vue'),
-    meta: { requiresNavBar: false}
+    meta: { requiresNavBar: false }
   },
-  { 
+  {
+    path: '/401',
+    name: 'unauthorized',
+    component: () => import('../components/Unauthorized.vue'),
+    meta: { requiresNavBar: false }
+  },
+  {
     path: '/404',
     name: 'notFound',
     component: () => import('../components/NotFound.vue'),
-    meta: { requiresNavBar: false}
+    meta: { requiresNavBar: false }
   },
-  { 
-    path: '*', 
+  {
+    path: '*',
     redirect: '/404'
   },
 ]
