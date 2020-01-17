@@ -9,12 +9,25 @@ export default new Vuex.Store({
     loggedIn: false,
     userId: null,
     searchObject: null,
+    rol: null,  
     viewKey:0
   },
   plugins: [createPersistedState()],
   mutations: {
-    login: state => state.loggedIn = true,
-    logout: state => state.loggedIn = false,
+    login (state, payload){
+      state.loggedIn = true;
+      state.userId = payload.userId;
+      state.rol = payload.userRol;
+    },
+    /* : state => state.loggedIn = true, */
+    /* logout: state => state.loggedIn = false, */
+    logout (state){
+      state.loggedIn = false;
+      state.userId = null;
+      state.searchObject = null;
+      state.rol = null;
+      state.viewKey = 0;
+    },
     searchedObject (state, book) {
       state.searchObject = book;
     }
