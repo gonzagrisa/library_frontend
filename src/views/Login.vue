@@ -66,7 +66,7 @@ export default {
 						userId: id,
 						userRol: rol
 					});
-					this.$router.push({ name: "books" });
+					this.$router.push({ name: "explore" });
 				})
 				.catch(error => {
 					console.log(error);
