@@ -1,19 +1,19 @@
 <template>
-	<v-app>
+	<v-app id="book">
 		<div class="loading mx-auto" v-if="loading">
 			<v-progress-circular :size="100" :width="5" color="primary" indeterminate></v-progress-circular>
 		</div>
 
 		<v-card v-else color="white" width="650px" class="mx-auto mt-12" raised>
 			<div class="d-flex flex-no-wrap justify-space-between">
-				<v-avatar id="cover" class="ma-1 mt-3 mb-3" size="400" tile>
+				<v-avatar id="cover" class="ma-1 mt-3 mb-3 pa-5" size="100%" tile>
 					<v-img v-if="book.cover" :src="this.book.cover" contain style="background-size:contain;" />
 					<v-img v-else contain src="../../public/no_cover.jpg" />
 				</v-avatar>
 				<v-divider id="divider" vertical></v-divider>
 
 				<div class="cardText">
-					<v-card-title id="title" class="black--text">{{this.book.title}}</v-card-title>
+					<v-card-title id="title" style="word-break: normal" class="black--text">{{this.book.title}}</v-card-title>
 					<v-card-subtitle id="author" class="black--text">{{this.book.author}}</v-card-subtitle>
 					<v-divider></v-divider>
 					<v-card-title id="loan" class="black--text mt-1">Préstamo</v-card-title>
@@ -43,6 +43,8 @@
 						:disabled="!this.$store.state.loggedIn || this.book.availables==0"
 						width="100%"
 					>Pedir Préstamo</v-btn>
+					<br />
+					<br />
 				</div>
 			</div>
 		</v-card>
@@ -73,8 +75,11 @@ export default {
 		).then(response => {
 			this.book = response.data.data.book[0];
 			console.log(this.book);
-			this.iconColor = (this.$store.state.loggedIn && this.book.availables>0) ? "blue" : "grey",
-			this.loading = false;
+			(this.iconColor =
+				this.$store.state.loggedIn && this.book.availables > 0
+					? "blue"
+					: "grey"),
+				(this.loading = false);
 		});
 	},
 
@@ -82,13 +87,29 @@ export default {
 		postLoan() {
 			Axios.post("http://localhost:8080/loans", {
 				days: this.days,
-				bookId: this.$store.state.searchObject.id
+				bookId: this.book.id
 			})
 				.then(response => {
+					this.$swal.fire({
+						icon: "success",
+						title: '<p style="font-family:Montserrat;">Préstamo Realizado</p>',
+						confirmButtonText:'<p style="font-family:Montserrat;">Ok</p>',
+						backdrop: false
+					}).then(()=>this.$router.push({name:'explore'}));
 					console.log(response.data);
 				})
 				.catch(error => {
-					console.log(error.response);
+					if (error.response.status == 400) {
+						this.$swal.fire({
+							icon: "error",
+							title: '<p style="font-family:Montserrat;">Préstamo no Realizado</p>',
+							html: '<p style="font-family:Montserrat;">Parece que no devolviste libros a tiempo!</p>',
+							confirmButtonText:'<p style="font-family:Montserrat;">Ok</p>',
+						});
+					}
+					else{
+						console.log(error.response);
+					}
 				});
 		},
 		decrement() {
@@ -149,7 +170,7 @@ export default {
 }
 
 #available {
-	margin-top: 1em;
+	margin-top: 0em;
 }
 
 #divider {
