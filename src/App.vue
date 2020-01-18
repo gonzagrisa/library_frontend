@@ -51,7 +51,7 @@
 					</template>
 				</v-autocomplete>
 			</div>
-			<v-btn to="/books" text rounded>
+			<v-btn to="/explore" text rounded>
 				<span class="mr-2">Explorar</span>
 				<v-icon>mdi-compass</v-icon>
 			</v-btn>
@@ -67,6 +67,10 @@
 				</v-btn>
 			</div>
 			<div v-else>
+				<v-btn v-if="this.$store.state.rol=='admin'" to="/books/create" text rounded>
+					<span class="mr-2">Registar Libro</span>
+					<v-icon>mdi-books</v-icon>
+				</v-btn>
 				<v-btn to="/loans" text rounded>
 					<span class="mr-2">Préstamos</span>
 					<v-icon>mdi-book</v-icon>
@@ -182,6 +186,8 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700|Open+Sans&display=swap");
+
+
 
 .v-application {
 	font-family: "Montserrat", sans-serif !important;
