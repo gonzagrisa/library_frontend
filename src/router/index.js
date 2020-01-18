@@ -41,9 +41,9 @@ const routes = [
     meta: { requiresNavBar: true }
   },
   {
-    path: '/books',
-    name: 'books',
-    component: () => import('../views/Books.vue'),
+    path: '/explore',
+    name: 'explore',
+    component: () => import('../views/Explore.vue'),
     meta: { requiresNavBar: true }
   },
   {
@@ -107,7 +107,7 @@ router.beforeEach((to, from, next) => {
   if (to.fullPath == '/login' || to.fullPath == '/register') {
     if (store.state.loggedIn) {
       console.log("Logged IN");
-      next('/books');
+      next('/explore');
     }
     else {
       next();
