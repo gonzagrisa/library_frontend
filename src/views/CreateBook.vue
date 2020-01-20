@@ -50,7 +50,13 @@
 				</v-form>
 				<v-divider></v-divider>
 				<v-card-actions class="justify-center mt-2 mb-2">
-					<v-btn :disabled="!valid" color="success" class="mr-4" @click="createBook" rounded>Agregar Libro</v-btn>
+					<v-btn
+						:disabled="!valid"
+						color="success"
+						class="mr-4"
+						@click="createBook"
+						rounded
+					>Agregar Libro</v-btn>
 				</v-card-actions>
 			</v-card-text>
 		</v-card>
@@ -98,13 +104,35 @@ export default {
 				amount: this.amount,
 				cover: this.url
 			})
-			.then(response=>{
-				console.log("LIBRO PUBLICADO")
-			})
-			.catch(error => {
-				console.log(error.response);
-			});
-		},
+				.then(response => {
+					this.$swal
+						.fire({
+							icon: "success",
+							title:
+								'<p style="font-family:Montserrat;">Libro Registrado</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						})
+						.then(() => this.$router.push({ name: "explore" }));
+				})
+				.catch(error => {
+					if (error.response.status == 401) {
+						this.$store.commit("logout");
+						this.$swal.fire({
+							icon: "error",
+							title:
+								'<p style="font-family:Montserrat;">Sesión Expirada</p>',
+							html:
+								'<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						}).then(()=> this.$router.push({ name: "login" }));
+					}
+					console.log(error.response);
+				});
+		}
 	}
 };
 </script>
