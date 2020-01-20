@@ -80,7 +80,7 @@ const routes = [
     meta: { requiresNavBar: false }
   },
   {
-    path: '/401',
+    path: '/403',
     name: 'unauthorized',
     component: () => import('../components/Unauthorized.vue'),
     meta: { requiresNavBar: false }

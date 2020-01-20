@@ -1,13 +1,9 @@
 <template>
-	<v-app id="NotFound">
-		<div id="E404">
-			<p class="Eimg"><v-img src="https://i.imgur.com/A040Lxr.png" max-height="400" max-width="400"></v-img></p>
-			<p class="Etext display-3 font-weight-black">Oops!</p>
-			<p class="Etext display-4 font-weight-black">Error 404</p>
-			<p class="Etext display-2">
-				Esta página se
-				<br />perdió en el Espacio
-			</p>
+	<v-app id="notAuth">
+		<div>
+			<v-img contain src="http://4.bp.blogspot.com/-eA6rkhyTL7U/U1f6Gh08z7I/AAAAAAAAHR4/yU_-Jgdo9Zk/s1600/Police1.jpg">
+
+			</v-img>
 		</div>
 	</v-app>
 </template>
