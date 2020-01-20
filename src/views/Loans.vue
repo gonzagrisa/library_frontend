@@ -21,11 +21,7 @@
 				>
 					<v-avatar id="cover" size="170" tile>
 						<v-img v-if="loan.cover" :src="loan.cover" contain style="background-size:contain;" />
-						<v-img
-							v-else
-							contain
-							src="../../public/no_cover.jpg"
-						/>
+						<v-img v-else contain src="../../public/no_cover.jpg" />
 					</v-avatar>
 					<v-card-text>
 						<p id="title" class="black--text">{{loan.title}}</p>
@@ -54,6 +50,7 @@ Axios.defaults.withCredentials = true;
 export default {
 	data() {
 		return {
+			valid: true,
 			loans: null,
 			loading: true,
 			expiracyDate: null,
@@ -72,8 +69,24 @@ export default {
 			})
 			.catch(error => {
 				this.loading = false;
-				console.log(error);
-				this.$router.push({ name: "serverError" });
+				if (error.response.status == 401) {
+					this.$store.commit("logout");
+					this.$swal
+						.fire({
+							icon: "error",
+							title:
+								'<p style="font-family:Montserrat;">Sesión Expirada</p>',
+							html:
+								'<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						})
+						.then(() => this.$router.push({ name: "login" }));
+				} else {
+					console.log(error);
+					this.$router.push({ name: "serverError" });
+				}
 			});
 	},
 	methods: {
@@ -103,6 +116,21 @@ export default {
 					this.$store.state.viewKey += 1;
 				})
 				.catch(error => {
+					if (error.response.status == 401) {
+						this.$store.commit("logout");
+						this.$swal
+							.fire({
+								icon: "error",
+								title:
+									'<p style="font-family:Montserrat;">Sesión Expirada</p>',
+								html:
+									'<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+								confirmButtonText:
+									'<p style="font-family:Montserrat;">Ok</p>',
+								backdrop: false
+							})
+							.then(() => this.$router.push({ name: "login" }));
+					}
 					console.log(error.response);
 				});
 		}
