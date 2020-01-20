@@ -43,10 +43,46 @@
 						:disabled="!this.$store.state.loggedIn || this.book.availables==0"
 						width="100%"
 					>Pedir Préstamo</v-btn>
+					<div class="text-center mt-4" v-if="this.$store.state.rol === 'admin'">
+						<v-row>
+							<v-btn class="mx-2" fab dark small color="teal" @click="dialog = true;">
+								<v-icon dark>mdi-pencil</v-icon>
+							</v-btn>
+							<v-btn class="mx-2" fab dark small color="red" @click="deleteBook">
+								<v-icon dark>mdi-delete</v-icon>
+							</v-btn>
+						</v-row>
+					</div>
 					<br />
 					<br />
 				</div>
 			</div>
+			<v-dialog v-model="dialog" max-width="400px">
+				<v-card>
+					<v-card-title>
+						<p class="mx-auto">Actualizar libro</p>
+					</v-card-title>
+					<p class="text-center">Ingrese la nueva cantidad de ejemplares</p>
+					<v-form v-model="valid">
+					<div class="mx-auto" id="amount">
+						<v-text-field
+							label="Cantidad"
+							prepend-icon="mdi-bookshelf"
+							type="number"
+							outlined
+							v-model="amount"
+							:rules="[amountRules]"
+							required
+						/>
+					</div>
+					</v-form>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn depressed raised class="white--text" color="blue" @click="dialog = false">Cancelar</v-btn>
+						<v-btn depressed raised class="white--text" color="green" @click="updateBook" :disabled="!valid">Actualizar</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 		</v-card>
 	</v-app>
 </template>
@@ -58,11 +94,19 @@ Axios.defaults.withCredentials = true;
 export default {
 	data() {
 		return {
+			valid: true,
 			days: 1,
 			cover: null,
 			book: [],
 			loading: true,
-			iconColor: null
+			iconColor: null,
+			dialog:false,
+			amount: 0,
+			amountRules: v => {
+				if (v < 0)
+					return "La Cantidad de Ejemplares no puede ser negativa";
+				return true;
+			}
 		};
 	},
 
@@ -70,17 +114,19 @@ export default {
 
 	mounted() {
 		window.scrollTo(0, 0);
-		Axios.get(
-			"http://localhost:8080/books/" + this.$route.params.bookId
-		).then(response => {
-			this.book = response.data.data.book[0];
-			console.log(this.book);
-			(this.iconColor =
-				this.$store.state.loggedIn && this.book.availables > 0
-					? "blue"
-					: "grey"),
-				(this.loading = false);
-		});
+		Axios.get("http://localhost:8080/books/" + this.$route.params.bookId)
+			.then(response => {
+				this.book = response.data.data.book[0];
+				this.amount = this.book.amount;
+				(this.iconColor =
+					this.$store.state.loggedIn && this.book.availables > 0
+						? "blue"
+						: "grey"),
+					(this.loading = false);
+			})
+			.catch(error => {
+				this.$router.push({ name: "notFound" });
+			});
 	},
 
 	methods: {
@@ -90,28 +136,157 @@ export default {
 				bookId: this.book.id
 			})
 				.then(response => {
-					this.$swal.fire({
-						icon: "success",
-						title: '<p style="font-family:Montserrat;">Préstamo Realizado</p>',
-						confirmButtonText:'<p style="font-family:Montserrat;">Ok</p>',
-						backdrop: false
-					}).then(()=>this.$router.push({name:'explore'}));
+					this.$swal
+						.fire({
+							icon: "success",
+							title:
+								'<p style="font-family:Montserrat;">Préstamo Realizado</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						})
+						.then(() => this.$router.push({ name: "explore" }));
 					console.log(response.data);
 				})
 				.catch(error => {
 					if (error.response.status == 400) {
 						this.$swal.fire({
 							icon: "error",
-							title: '<p style="font-family:Montserrat;">Préstamo no Realizado</p>',
-							html: '<p style="font-family:Montserrat;">Parece que no devolviste libros a tiempo!</p>',
-							confirmButtonText:'<p style="font-family:Montserrat;">Ok</p>',
+							title:
+								'<p style="font-family:Montserrat;">Préstamo no Realizado</p>',
+							html:
+								'<p style="font-family:Montserrat;">Parece que no devolviste libros a tiempo!</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
 						});
-					}
-					else{
+					} else if (error.response.status == 401) {
+						this.$store.commit("logout");
+						this.$swal
+							.fire({
+								icon: "error",
+								title:
+									'<p style="font-family:Montserrat;">Sesión Expirada</p>',
+								html:
+									'<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+								confirmButtonText:
+									'<p style="font-family:Montserrat;">Ok</p>',
+								backdrop: false
+							})
+							.then(() => this.$router.push({ name: "login" }));
+					} else {
 						console.log(error.response);
 					}
 				});
 		},
+
+		updateBook(){
+			Axios.put("http://localhost:8080/books", {
+				amount: Number (this.amount),
+				bookId: this.book.id
+			})
+			.then(response => {
+				console.log(response);
+				this.$swal
+					.fire({
+						icon: "success",
+						title:
+							'<p style="font-family:Montserrat;">Cantidad Actualizada</p>',
+						confirmButtonText:
+							'<p style="font-family:Montserrat;">Ok</p>',
+						backdrop: false
+					})
+					.then(() => this.$store.state.viewKey += 1);
+			})
+			.catch(error=>{
+				console.log(error.response);
+				if (error.response.status == 401){
+					this.$store.commit("logout");
+					this.$swal
+						.fire({
+							icon: "error",
+							title:
+								'<p style="font-family:Montserrat;">Sesión Expirada</p>',
+							html:
+								'<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						})
+						.then(() => this.$router.push({ name: "login" }));
+				}
+				else if (error.response.status == 403){
+					this.$router.push({ name: "unauthorized" });
+				}
+				else{
+					this.$swal
+						.fire({
+							icon: "error",
+							title:
+								'<p style="font-family:Montserrat;">No se pudo actualizar la cantidad de ejemplares</p>',
+							html:
+								'<p style="font-family:Montserrat;">La nueva cantidad es menor a la cantidad de ejemplares que ya se encuentran en préstamo</p>',
+							confirmButtonText:
+								'<p style="font-family:Montserrat;">Ok</p>',
+							backdrop: false
+						})
+				}
+			})
+		},
+
+		deleteBook() {
+			const apiCall = "http://localhost:8080/books/" + this.book.id;
+			console.log(apiCall);
+			console.log(this.book.id);
+			this.$swal.fire({
+				title: "Are you sure?",
+				text: "You won't be able to revert this!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, delete it!"
+			}).then(result => {
+				if (result.value) {
+					Axios.delete(apiCall)
+						.then(response => {
+							this.$swal.fire({
+								icon: "success",
+								title: '<p style="font-family:Montserrat;">Eliminado!</p>',
+								html: '<p style="font-family:Montserrat;">Libro eliminado con éxito</p>',
+								backdrop: false
+							}).then(() => this.$router.push({name:'explore'}));
+						})
+						.catch(error => {
+							console.log(error.response.status);
+							console.log(error.response.code);
+							switch (error.response.status){
+								case 400: 
+									this.$swal.fire({
+										icon: "error",
+										title:'<p style="font-family:Montserrat;">No se puede Eliminar el Libro</p>',
+										html: '<p style="font-family:Montserrat;">Hay ejemplares del libro en préstamo</p>',
+										confirmButtonText: '<p style="font-family:Montserrat;">Ok</p>',
+										backdrop: false
+									}); break;
+								case 401:
+									this.$store.commit("logout");
+									this.$swal.fire({
+										icon: "error",
+										title: '<p style="font-family:Montserrat;">Sesión Expirada</p>',
+										html: '<p style="font-family:Montserrat;">Inicie sesión de nuevo</p>',
+										confirmButtonText:'<p style="font-family:Montserrat;">Ok</p>',
+										backdrop: false
+									})
+									.then(() => this.$router.push({ name: "login" })); break;
+								case 403:
+									this.$router.push({ name: "unauthorized" }); break;
+							}
+						})
+				}
+			});
+		},
+
 		decrement() {
 			this.days--;
 		},
@@ -176,4 +351,9 @@ export default {
 #divider {
 	margin-right: 1rem;
 }
+
+#amount{
+	width: 250px;
+}
+
 </style>
