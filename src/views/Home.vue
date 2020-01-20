@@ -74,7 +74,7 @@
 			</v-parallax>
 		</section>
 
-		<!-- <section>
+		<section>
 			<v-container grid-list-xl>
 				<v-layout row wrap justify-center class="my-12">
 					<v-flex xs12 sm4>
@@ -82,10 +82,11 @@
 							<v-card-title primary-title class="layout justify-center">
 								<div class="headline">Sobre nosotros</div>
 							</v-card-title>
-							<v-card-text>
-								Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-								Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-								Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+							<v-card-text class="text-justify"> 
+								<strong>"BookJar"</strong> es una de las librerías más importantes de la Ciudad de Córdoba. <br>
+								El local se encuentra desde sus principios en Ituzaingó 1167 de la Ciudad de Córdoba. Actualmente contamos con más de 20.000 títulos en diversas temáticas e idiomas, pudiendo encontrar también textos escolares y universitarios. <br>
+								La <strong>Misión</strong> de BookJar consiste en contribuir con el fomento y desarrollo del entretenimiento y la cultura, buscando crear espacios apropiados para el encuentro con el conocimiento orientándose a la satisfacción de las necesidades de los clientes. <br>
+								La <strong>Visión</strong> de BookJar es afianzar el liderazgo de la empresa en el mercado de la difusión de la cultura, accediendo a nuevos mercados y enriqueciendo la oferta de productos y servicios brindados. 
 							</v-card-text>
 						</v-card>
 					</v-flex>
@@ -117,7 +118,7 @@
 										<v-icon class="blue--text text--lighten-2">mdi-email</v-icon>
 									</v-list-item-action>
 									<v-list-item-content>
-										<v-list-item-title>librariadelgonzi@gmail.com</v-list-item-title>
+										<v-list-item-title>bookjar@gmail.com</v-list-item-title>
 									</v-list-item-content>
 								</v-list-item>
 							</v-list>
@@ -125,7 +126,7 @@
 					</v-flex>
 				</v-layout>
 			</v-container>
-		</section> -->
+		</section>
 	</v-app>
 </template>
 
