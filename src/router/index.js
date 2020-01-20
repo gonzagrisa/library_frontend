@@ -53,6 +53,12 @@ const routes = [
     meta: { requiresNavBar: true }
   },
   {
+    path: '/book/loans/:bookId',
+    name: 'bookLoans',
+    component: () => import('../views/LoansBook.vue'),
+    meta: {requiresNavBar: true}
+  },
+  {
     path: '/loans',
     name: 'loans',
     component: () => import('../views/Loans.vue'),
