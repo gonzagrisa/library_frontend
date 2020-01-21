@@ -98,7 +98,7 @@ export default {
 	},
 	methods: {
 		createBook() {
-			Axios.post("http://localhost:8080/books", {
+			Axios.post("http://localhost:8000/books", {
 				title: this.title,
 				author: this.author,
 				amount: this.amount,

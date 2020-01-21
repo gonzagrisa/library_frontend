@@ -166,7 +166,7 @@ export default {
 	methods: {
 		async signup() {
 			await axios
-				.post("http://localhost:8080/signup", {
+				.post("http://localhost:8000/signup", {
 					username: this.username,
 					email: this.email,
 					password: this.password
@@ -189,7 +189,7 @@ export default {
 			}
 			axios
 				.get(
-					"http://localhost:8080/signup/checkUsername/" +
+					"http://localhost:8000/signup/checkUsername/" +
 						this.username
 				)
 				.then(res => {
@@ -204,7 +204,7 @@ export default {
 				return (this.emailUsed = false);
 			}
 			await axios
-				.get("http://localhost:8080/signup/checkEmail/" + this.email)
+				.get("http://localhost:8000/signup/checkEmail/" + this.email)
 				.then(res => {
 					this.emailUsed = false;
 				})

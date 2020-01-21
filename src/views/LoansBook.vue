@@ -66,12 +66,12 @@ export default {
 
 	mounted() {
 		window.scrollTo(0, 0);
-		Axios.get("http://localhost:8080/books/" + this.$route.params.bookId)
+		Axios.get("http://localhost:8000/books/" + this.$route.params.bookId)
 			.then(response => {
 				console.log(response.data.data.book[0]);
 				this.book = response.data.data.book[0];
 				Axios.get(
-					"http://localhost:8080/book/loans/" +
+					"http://localhost:8000/book/loans/" +
 						this.$route.params.bookId
 				)
 					.then(response => {

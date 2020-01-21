@@ -114,7 +114,7 @@ export default {
 	methods: {
 		async logout() {
 			await axios
-				.post("http://localhost:8080/logout")
+				.post("http://localhost:8000/logout")
 				.then(res => {
 					if (res.status == 200) {
 						this.$store.commit("logout");
@@ -149,7 +149,7 @@ export default {
 			if (this.isLoading) return;
 			this.isLoading = true;
 			// Lazily load input items
-			fetch("http://localhost:8080/books")
+			fetch("http://localhost:8000/books")
 				.then(res => res.json())
 				.then(res => {
 					const count = res.count;

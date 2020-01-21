@@ -122,7 +122,7 @@ export default {
 
 	mounted() {
 		window.scrollTo(0, 0);
-		Axios.get("http://localhost:8080/books/" + this.$route.params.bookId)
+		Axios.get("http://localhost:8000/books/" + this.$route.params.bookId)
 			.then(response => {
 				this.book = response.data.data.book[0];
 				this.amount = this.book.amount;
@@ -139,7 +139,7 @@ export default {
 
 	methods: {
 		postLoan() {
-			Axios.post("http://localhost:8080/loans", {
+			Axios.post("http://localhost:8000/loans", {
 				days: this.days,
 				bookId: this.book.id
 			})
@@ -189,7 +189,7 @@ export default {
 		},
 
 		updateBook() {
-			Axios.put("http://localhost:8080/books", {
+			Axios.put("http://localhost:8000/books", {
 				amount: Number(this.amount),
 				bookId: this.book.id
 			})
@@ -240,7 +240,7 @@ export default {
 		},
 
 		deleteBook() {
-			const apiCall = "http://localhost:8080/books/" + this.book.id;
+			const apiCall = "http://localhost:8000/books/" + this.book.id;
 			console.log(apiCall);
 			console.log(this.book.id);
 			this.$swal

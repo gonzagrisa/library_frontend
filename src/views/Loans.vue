@@ -61,7 +61,7 @@ export default {
 	created() {
 		console.log("UserId::" + this.$store.state.userId);
 		this.loading = true;
-		Axios.get("http://localhost:8080/loans/" + this.$store.state.userId)
+		Axios.get("http://localhost:8000/loans/" + this.$store.state.userId)
 			.then(response => {
 				console.log(response);
 				this.loading = false;
@@ -110,7 +110,7 @@ export default {
 		},
 		returnBook(idLoan) {
 			console.log(idLoan);
-			Axios.delete("http://localhost:8080/loans/" + idLoan)
+			Axios.delete("http://localhost:8000/loans/" + idLoan)
 				.then(response => {
 					console.log(response.data);
 					this.$store.state.viewKey += 1;

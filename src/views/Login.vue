@@ -54,7 +54,7 @@ export default {
 		login() {
 			this.loading = true;
 			axios
-				.post("http://localhost:8080/login", {
+				.post("http://localhost:8000/login", {
 					email: this.email,
 					password: this.password
 				})
